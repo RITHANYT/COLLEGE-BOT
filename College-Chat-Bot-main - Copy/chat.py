@@ -7,9 +7,7 @@ import train  # Ensure train.py is in the same directory for preprocess_text
 model = np.load('model.npy', allow_pickle=True).item()
 
 def find_response(user_input):
-    """
-    Finds the best response for the user's input based on cosine similarity.
-    """
+    
     preprocessed_input = train.preprocess_text(user_input)
     user_vector = model['vectorizer'].transform([preprocessed_input]).toarray()
 
