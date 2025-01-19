@@ -47,7 +47,6 @@ import requests
 
 app = Flask(__name__)
 
-# Load spaCy model for embeddings
 nlp = spacy.load("en_core_web_sm")
 
 # Load the trained model
