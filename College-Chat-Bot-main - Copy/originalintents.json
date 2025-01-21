@@ -438,18 +438,7 @@
           {
                   "tag": "library rules",
                   "patterns": [
-                          "is there any library rules",
-                          "library rules",
-                          "library facilities",
-                          "do you have library rules",
-                          "does the college have library rules",
-                          "college library rules",
-                          "where can i get books",
-                          "book rules",
-                          "Where is library",
-                          
-                          "Tell me about library rules",
-                          "how many libraries rules",
+                          "library",
                           ""
                   ],
                   "responses": [
