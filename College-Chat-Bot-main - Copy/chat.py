@@ -113,7 +113,7 @@ def find_response(user_input):
 
     # Find the best match
     max_score = max(scores)
-    if max_score >= 0.7:  # Threshold for a good match
+    if max_score >= 0.6:  # Threshold for a good match
         best_match_index = scores.index(max_score)
         tag = label_encoder.inverse_transform([best_match_index])[0]
         return random.choice(responses[tag])
