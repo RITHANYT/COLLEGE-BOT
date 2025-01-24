@@ -123,7 +123,7 @@ def find_response(user_input):
         return fetch_college_info()
 
     # Fallback response
-    return "I'm sorry, I didn't understand that. Can you please rephrase?"
+    return "I'm sorry ,I'm unable to reach that.Can you say again?"
 
 # Example usage
 if __name__ == "__main__":
