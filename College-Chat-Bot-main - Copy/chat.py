@@ -36,96 +36,46 @@ from sklearn.metrics.pairwise import cosine_similarity
 import random
 import requests
 from bs4 import BeautifulSoup
+from sentence_transformers import SentenceTransformer, util
 
-def preprocess_text(text):
-    """
-    Preprocesses the text by removing non-alphanumeric characters and converting to lowercase.
-    """
-    return ''.join([char.lower() for char in text if char.isalnum() or char.isspace()])
-
-# Load intents from the JSON file
-with open('College-Chat-Bot-main - Copy/originalintents.json', 'r', encoding='utf-8') as file:
+# Load intents
+with open('originalintents.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
-tags = []
-patterns = []
-responses = {}
+# Preprocess text
+def preprocess_text(text):
+    return ''.join([char.lower() for char in text if char.isalnum() or char.isspace()])
 
-for intent in data['intents']:
-    tags.append(intent['tag'])
-    responses[intent['tag']] = intent['responses']
-    for pattern in intent['patterns']:
-        patterns.append(pattern)
+# Load Sentence Transformer model
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Preprocess patterns
-preprocessed_patterns = [preprocess_text(p) for p in patterns]
-
-# Convert text to feature vectors
-vectorizer = CountVectorizer().fit(preprocessed_patterns)
-X = vectorizer.transform(preprocessed_patterns).toarray()
-
-# Encode tags
-label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(tags)
-
-# Function to fetch information from the college website
+# Fetch college info
 def fetch_college_info():
     url = 'https://www.bitsathy.ac.in'
-    
     try:
         response = requests.get(url)
-        
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Example: Extract the main header or any useful section. 
-            # This needs to be customized based on actual structure of the website.
-            
-            # Trying to extract the main header information
-            main_header = soup.find('h1')  # Look for an <h1> tag, change as needed
-            
-            if main_header:
-                return f"Main Header: {main_header.get_text(strip=True)}"
-            
-            # You can extract other content based on the structure of the site
-            # For example, finding a paragraph or div that contains general information
-            general_info = soup.find('p')  # Example: Look for the first <p> tag
-            if general_info:
-                return general_info.get_text(strip=True)
-            
-            return "Couldn't find the specific information on the website."
-        else:
-            return "The college website is currently unavailable. Please try again later."
-    
+            announcements = soup.select('.announcement-class')  # Replace with actual class
+            if announcements:
+                return "\n".join([a.get_text(strip=True) for a in announcements])
+            return "No announcements found."
+        return "The college website is currently unavailable."
     except Exception as e:
-        return f"An error occurred while fetching college information: {str(e)}"
+        return f"An error occurred: {str(e)}"
 
-# Function to find the best response
+# Find response
 def find_response(user_input):
-    """
-    Finds the best response for the user's input using cosine similarity.
-    """
-    preprocessed_input = preprocess_text(user_input)
-    user_vector = vectorizer.transform([preprocessed_input]).toarray()
-
-    # Compute similarity with all patterns
-    scores = [cosine_similarity(user_vector, [pattern])[0][0] for pattern in X]
-
-    # Find the best match
-    max_score = max(scores)
-    if max_score >= 0.8:  # Threshold for a good match
-        best_match_index = scores.index(max_score)
+    user_embedding = model.encode([preprocess_text(user_input)])
+    pattern_embeddings = model.encode(preprocessed_patterns)
+    similarities = util.cos_sim(user_embedding, pattern_embeddings)
+    best_match_index = similarities.argmax()
+    if similarities[0][best_match_index] >= 0.8:
         tag = label_encoder.inverse_transform([best_match_index])[0]
         return random.choice(responses[tag])
+    return fetch_college_info()
 
-    # Check for web scraping keywords
-    elif any(keyword in user_input.lower() for keyword in ["college", "info", "website"]):
-        return fetch_college_info()
-
-    # Fallback response
-    return "I'm sorry ,I'm unable to reach that.Can you say again?"
-
-# Example usage
+# Main loop
 if __name__ == "__main__":
     print("Chatbot is ready! (Type 'quit' to exit)")
     while True:
