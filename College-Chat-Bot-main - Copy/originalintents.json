@@ -438,8 +438,8 @@
           {
                   "tag": "library rules",
                   "patterns": [
-                          "library",
-                          ""
+                          "library"
+                          
                   ],
                   "responses": [
                     
