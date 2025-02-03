@@ -1,4 +1,4 @@
-"""import numpy as np
+import numpy as np
 import random
 from sklearn.metrics.pairwise import cosine_similarity
 import train  # Ensure train.py is in the same directory for preprocess_text
@@ -27,4 +27,4 @@ def process_text(user_input):
     return find_response(user_input)
 
 
-"""
+
