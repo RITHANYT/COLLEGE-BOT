@@ -80,13 +80,3 @@ X = vectorizer.transform(preprocessed_patterns).toarray()
 label_encoder = LabelEncoder()
 y = label_encoder.fit_transform(tags)
 
-# Save the model
-model = {
-    'vectorizer': vectorizer,
-    'patterns': X,
-    'tags': label_encoder,
-    'responses': responses
-}
-
-np.save('model.npy', model)
-print("Model training complete. Saved to model.npy.")
