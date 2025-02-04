@@ -47,7 +47,7 @@ print("Model training complete. Saved to model.npy.")
 
 
 """
-import json
+"""import json
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
@@ -78,5 +78,5 @@ X = vectorizer.transform(preprocessed_patterns).toarray()
 
 # Encode tags
 label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(tags)
+y = label_encoder.fit_transform(tags)"""
 
