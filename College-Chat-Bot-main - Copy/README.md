@@ -3,8 +3,6 @@ My team and I have created an exciting mini project using NLP (Natural Language 
 # NLP Chatbot with Web Scraping
 This project implements a chatbot using Natural Language Processing (NLP) techniques and web scraping. The chatbot is designed to provide responses based on pre-defined patterns and can fetch information from the web using web scraping. The code is written in Python and Flask framework is used for creating a web interface.
 # Dependencies Installation
-1.Clone the repository:
-git clone https://github.com/DHANUSHGCse/College-Chat-Bot/
 2.Install the required Python packages:
 pip install -r requirements.txt
 # Usage
